@@ -175,6 +175,7 @@ void GameEngine::start() {
 
     Model model1("C:\\Users\\54367\\CLionProjects\\waterSim\\res\\models\\nanosuit\\nanosuit.obj");
 
+
     /*加载skybox*/
     unsigned int cubeMapTexture = loader.loadCubeMap(faces);
     Shader skyboxShader("../res/shaderCode/skybox_shader.vs", "../res/shaderCode/skybox_shader.fs");
