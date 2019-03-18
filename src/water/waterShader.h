@@ -16,6 +16,8 @@ public:
     void setView(glm::mat4 view);
 
     void setModel(glm::mat4 model);
+
+    void setPlane(glm::vec4 plane);
 };
 
 

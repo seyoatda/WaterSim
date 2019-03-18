@@ -6,16 +6,19 @@
 #include "displayManager.h"
 
 //静态变量初始化
-GLFWwindow *DisplayManager::wwindow;
+GLFWwindow* DisplayManager::wwindow;
+float DisplayManager::aspectRatio;
 
+int DisplayManager::createWindow(int width, int height, const std::string name) {
+    //
+    aspectRatio = (float) width / (float) height;
 
-int DisplayManager::createWindow(const std::string name) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    wwindow = glfwCreateWindow(800, 600, name.c_str(), NULL, NULL);
+    wwindow = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
     if (wwindow == NULL) {
         std::cout << "failed to create window" << std::endl;
         glfwTerminate();
@@ -32,7 +35,9 @@ int DisplayManager::createWindow(const std::string name) {
 }
 
 void DisplayManager::update() {
-
+    //检查事件，交换双重缓存
+    glfwPollEvents();
+    glfwSwapBuffers(wwindow);
 }
 
 void DisplayManager::close() {
@@ -41,4 +46,8 @@ void DisplayManager::close() {
 
 GLFWwindow *DisplayManager::window() {
     return wwindow;
+}
+
+float DisplayManager::getRatio() {
+    return aspectRatio;
 }

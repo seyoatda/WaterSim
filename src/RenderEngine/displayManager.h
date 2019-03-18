@@ -13,7 +13,8 @@
 class DisplayManager {
 public:
 
-    static int createWindow(std::string);
+
+    static int createWindow(int width, int height, std::string);
 
     static void update();
 
@@ -21,11 +22,12 @@ public:
 
     static GLFWwindow *window();
 
+    static float getRatio();
+
 private:
     //窗口
-    static const int WIDTH = 1280;
-    static const int HEIGHT = 720;
 
+    static float aspectRatio;
     static std::string name;
     static GLFWwindow *wwindow;
 

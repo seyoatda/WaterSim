@@ -21,3 +21,6 @@ void WaterShader::setView(glm::mat4 view) {
 void WaterShader::setModel(glm::mat4 model) {
     setMat4("model",model);
 }
+void WaterShader::setPlane(glm::vec4 plane) {
+    setVec4("plane",plane);
+}

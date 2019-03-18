@@ -6,15 +6,16 @@
 #define OPENGL_LOADER_H
 
 #include <vector>
-#include "object.h"
+#include "../Entities/object.h"
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+#include "../tool/stb_image.h"
+#include <iostream>
 
 class Loader {
 public:
-    Object loadVAO(std::vector<float> vertices, unsigned int stride,std::initializer_list<int> pos);
+    Object loadVAO(std::vector<float> vertices, unsigned int stride, std::initializer_list<int> pos);
 
     unsigned int loadCubeMap(std::vector<std::string> faces);
 

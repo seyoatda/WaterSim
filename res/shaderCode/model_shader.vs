@@ -11,8 +11,12 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+uniform vec4 clipPlane=vec4(0,-1,0,15);
+
 void main()
 {
+
+    gl_ClipDistance[0] = -10;
     TexCoords = aTexCoords;
     Normal=aNormal;
     Pos=aPos;
