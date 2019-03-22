@@ -5,6 +5,7 @@
 #include "loader.h"
 #include <numeric>
 
+
 /*
  *
  */
@@ -30,6 +31,7 @@ Object Loader::loadVAO(std::vector<float> vertices, unsigned int stride, std::in
 }
 
 unsigned int Loader::loadCubeMap(std::vector<std::string> faces) {
+
     unsigned int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -51,5 +53,7 @@ unsigned int Loader::loadCubeMap(std::vector<std::string> faces) {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
     return textureID;
+
 }

@@ -5,8 +5,8 @@
 #include "waterShader.h"
 #include <string>
 namespace{
-    constexpr auto VERTPATH="../res/shaderCode/water_shader.vs";
-    constexpr auto FRAGPATH="../res/shaderCode/water_shader.fs";
+    constexpr auto VERTPATH="../res/shaderCode/water_shader.vert";
+    constexpr auto FRAGPATH="../res/shaderCode/water_shader.frag";
 }
 
 WaterShader::WaterShader() :Shader(VERTPATH,FRAGPATH){

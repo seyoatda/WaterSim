@@ -11,6 +11,7 @@
 #include "../camera/camera.h"
 #include "../Entities/model.h"
 #include "../water/waterFbo.h"
+#include <glm/gtc/type_ptr.hpp>
 
 class GameEngine {
 public:

@@ -3,6 +3,9 @@
 //
 
 #include "gameEngine.h"
+#include "../Skybox/skyboxRenderer.h"
+#include "mainRenderer.h"
+
 glm::vec3 cubePositions[] = {
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(2.0f, 0.0f, 0.0f),
@@ -77,11 +80,11 @@ vector<std::string> faces{
 vector<float> quadVertices = {
         // positions   // texCoords
         -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-        0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f,  0.0f, 1.0f, 1.0f,
-        0.5f, 0.5f,  0.0f, 1.0f, 1.0f,
-        -0.5f, 0.5f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.0f,  0.0f, 0.0f
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f
 };
 //创建数据
 vector<float> vertices = {
@@ -133,15 +136,15 @@ unsigned int indices[] = {
         1, 2, 3  // second triangle
 };
 
-float GameEngine::deltaTime=0.0;
-float GameEngine::lastFrame=0.0;
-float GameEngine::lastX=640.0;
-float GameEngine::lastY=320.0;
-bool GameEngine::firstMouse=true;
-float GameEngine::ratio=0.5;
-Camera GameEngine::camera=Camera(glm::vec3(0.0f,0.0f,3.0f));
+float GameEngine::deltaTime = 0.0;
+float GameEngine::lastFrame = 0.0;
+float GameEngine::lastX = 640.0;
+float GameEngine::lastY = 320.0;
+bool GameEngine::firstMouse = true;
+float GameEngine::ratio = 0.5;
+Camera GameEngine::camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-GameEngine::GameEngine(){
+GameEngine::GameEngine() {
 
     DisplayManager::createWindow(1280, 720, "learnOpenGL");
     GLFWwindow *wwindow = DisplayManager::window();
@@ -158,17 +161,16 @@ GameEngine::~GameEngine() {
 void GameEngine::start() {
 
     //创建一个渲染程序
-    Shader ourShader("../res/shaderCode/33shader.vs",
-                     "../res/shaderCode/33shader.fs");
-    Shader lampShader("../res/shaderCode/light_shader.vs",
-                      "../res/shaderCode/light_shader.fs");
-    Shader fboShader("../res/shaderCode/fboShader.vs",
-                     "../res/shaderCode/fboShader.fs");
+    Shader ourShader(R"(../res/shaderCode/33shader)");
+    Shader lampShader("../res/shaderCode/light_shader");
+    Shader fboShader("../res/shaderCode/fboShader");
+
+    SkyboxRenderer skyboxRenderer;
+    MainRenderer mainRenderer;
 
     Loader loader;    //将物体加载到vao中
 
     Object lightObj = loader.loadVAO(vertices, 8, {3});
-    Object skyboxObj = loader.loadVAO(skyboxVertices, 3, {3});
     Object fboObj = loader.loadVAO(quadVertices, 5, {3, 2});
 
     WaterFbo waterFbo;
@@ -176,14 +178,10 @@ void GameEngine::start() {
     Model model1("C:\\Users\\54367\\CLionProjects\\waterSim\\res\\models\\nanosuit\\nanosuit.obj");
 
 
-    /*加载skybox*/
-    unsigned int cubeMapTexture = loader.loadCubeMap(faces);
-    Shader skyboxShader("../res/shaderCode/skybox_shader.vs", "../res/shaderCode/skybox_shader.fs");
-
     glEnable(GL_DEPTH_TEST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    double eqn[]={0.0,1.0,0.0,0.0};
+    double eqn[] = {0.0, 1.0, 0.0, 0.0};
     glEnable(GL_CLIP_DISTANCE0);
 
 
@@ -213,15 +211,14 @@ void GameEngine::start() {
         model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
         ourShader.setMat4("model", model);
 
+
         //建立观察矩阵
         glm::mat4 view = camera.GetViewMatrix();
-        ourShader.setMat4("view", view);
 
         //建立投影矩阵
         glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(camera.Zoom), displayManager->getRatio(), 0.1f, 100.0f);
-        ourShader.setMat4("projection", projection);
-
+        projection = glm::perspective(glm::radians(camera.Zoom), DisplayManager::getRatio(), 0.1f, 100.0f);
+        mainRenderer.setUboTrans(projection, view);
 
 //        //
         ourShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
@@ -258,8 +255,6 @@ void GameEngine::start() {
 
         //设置光源
         lampShader.use();
-        lampShader.setMat4("view", view);
-        lampShader.setMat4("projection", projection);
         glBindVertexArray(lightObj.getVao());
         for (int i = 0; i < 4; i++) {
             model = glm::mat4(1.0f);
@@ -270,20 +265,7 @@ void GameEngine::start() {
         }
 
         // draw skybox as last
-        glDepthFunc(
-                GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-        skyboxShader.use();
-        view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
-        skyboxShader.setMat4("view", view);
-        skyboxShader.setMat4("projection", projection);
-        // skybox cube
-        glBindVertexArray(skyboxObj.getVao());
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, skyboxObj.getCount());
-        glBindVertexArray(0);
-        glDepthFunc(GL_LESS); // set depth function back to default
-
+        skyboxRenderer.render(camera);
 
         waterFbo.unbindFbo();
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -296,16 +278,6 @@ void GameEngine::start() {
         model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
         model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
         ourShader.setMat4("model", model);
-
-
-        //建立观察矩阵
-        view = camera.GetViewMatrix();
-        ourShader.setMat4("view", view);
-
-        //建立投影矩阵
-        projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(camera.Zoom), displayManager->getRatio(), 0.1f, 100.0f);
-        ourShader.setMat4("projection", projection);
 
 
 //        //
@@ -357,9 +329,9 @@ void GameEngine::start() {
         fboShader.use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 2.0f));
-        model = glm::scale(model,glm::vec3(1.6f, 0.9f, 1.0f));
-        fboShader.setMat4("model",model);
-        fboShader.setMat4("view",view);
+        model = glm::scale(model, glm::vec3(1.6f, 0.9f, 1.0f));
+        fboShader.setMat4("model", model);
+        fboShader.setMat4("view", view);
         fboShader.setMat4("projection", projection);
 
         glBindVertexArray(fboObj.getVao());
@@ -370,19 +342,7 @@ void GameEngine::start() {
 
 
         // draw skybox as last
-        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-        skyboxShader.use();
-        view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
-        skyboxShader.setMat4("view", view);
-        skyboxShader.setMat4("projection", projection);
-        // skybox cube
-        glBindVertexArray(skyboxObj.getVao());
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, skyboxObj.getCount());
-        glBindVertexArray(0);
-        glDepthFunc(GL_LESS); // set depth function back to default
-
+        skyboxRenderer.render(camera);
 
         //清除缓冲，响应窗口事件
         DisplayManager::update();

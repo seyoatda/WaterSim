@@ -17,10 +17,11 @@ public:
 
     Shader(std::string vertexPath, std::string fragmentPath);
 
+    Shader(std::string path);
     //
     void use();
 
-    void stop();
+    void unuse();
 
     void setBool(const std::string &name, bool value) const;
 
@@ -44,6 +45,8 @@ private:
 
     //
     void checkCompileErrors(unsigned int shader, std::string type);
+
+    void createShader(std::string vertexPath, std::string fragmentPath);
 };
 
 

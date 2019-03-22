@@ -4,6 +4,16 @@
 #include "shader.h"
 
 Shader::Shader(std::string vertexPath, std::string fragmentPath) {
+    createShader(std::move(vertexPath), std::move(fragmentPath));
+}
+
+Shader::Shader(std::string path) {
+    std::string vertPath = path + ".vert";
+    std::string fragPath = path + ".frag";
+    createShader(vertPath, fragPath);
+}
+
+void Shader::createShader(std::string vertexPath, std::string fragmentPath) {
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
@@ -25,7 +35,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath) {
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
     }
-    catch (std::ifstream::failure e) {
+    catch (std::ifstream::failure &e) {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
     }
     const char *vShaderCode = vertexCode.c_str();
@@ -43,14 +53,14 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath) {
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fShaderCode, NULL);
     glCompileShader(fragment);
-    checkCompileErrors(fragment,"FRAGMENT");
+    checkCompileErrors(fragment, "FRAGMENT");
     // 着色器程序
     ID = glCreateProgram();
     glAttachShader(ID, vertex);
     glAttachShader(ID, fragment);
     glLinkProgram(ID);
     // 打印连接错误（如果有的话）
-    checkCompileErrors(ID,"PROGRAM");
+    checkCompileErrors(ID, "PROGRAM");
 
     // 删除着色器，它们已经链接到我们的程序中了，已经不再需要了
     glDeleteShader(vertex);
@@ -61,7 +71,7 @@ void Shader::use() {
     glUseProgram(ID);
 }
 
-void Shader::stop(){
+void Shader::unuse() {
     glUseProgram(0);
 }
 
@@ -76,22 +86,25 @@ void Shader::setInt(const std::string &name, int value) const {
 void Shader::setFloat(const std::string &name, float value) const {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
+
 void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const {
-    glUniformMatrix4fv(glGetUniformLocation(ID,name.c_str()),1,GL_FALSE,&mat[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
+
 void Shader::setVec3(const std::string &name, const glm::vec3 value) const {
-    glUniform3fv(glGetUniformLocation(ID,name.c_str()),1,&value[0]);
+    glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
+
 void Shader::setVec3(const std::string &name, float x, float y, float z) const {
-    glUniform3f(glGetUniformLocation(ID,name.c_str()),x,y,z);
+    glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
 }
 
 void Shader::setVec3(const std::string &name, float x) const {
-    glUniform3f(glGetUniformLocation(ID,name.c_str()),x,x,x);
+    glUniform3f(glGetUniformLocation(ID, name.c_str()), x, x, x);
 }
 
 void Shader::setVec4(const std::string &name, const glm::vec4 &value) const {
-    glUniform4fv(glGetUniformLocation(ID,name.c_str()),1,&value[0]);
+    glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
 
 void Shader::checkCompileErrors(unsigned int shader, std::string type) {

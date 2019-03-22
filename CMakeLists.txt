@@ -45,18 +45,18 @@ add_executable(waterSim
         res/pic/right.jpg
         res/pic/top.jpg
         res/pic/wall.jpg
-        res/shaderCode/33shader.fs
-        res/shaderCode/33shader.vs
-        res/shaderCode/fboShader.fs
-        res/shaderCode/fboShader.vs
-        res/shaderCode/light_shader.fs
-        res/shaderCode/light_shader.vs
-        res/shaderCode/model_shader.fs
-        res/shaderCode/model_shader.vs
-        res/shaderCode/skybox_shader.fs
-        res/shaderCode/skybox_shader.vs
-        res/shaderCode/water_shader.fs
-        res/shaderCode/water_shader.vs
+        res/shaderCode/33shader.frag
+        res/shaderCode/33shader.vert
+        res/shaderCode/fboShader.frag
+        res/shaderCode/fboShader.vert
+        res/shaderCode/light_shader.frag
+        res/shaderCode/light_shader.vert
+        res/shaderCode/model_shader.frag
+        res/shaderCode/model_shader.vert
+        res/shaderCode/skybox_shader.frag
+        res/shaderCode/skybox_shader.vert
+        res/shaderCode/water_shader.frag
+        res/shaderCode/water_shader.vert
         src/Camera/camera.cpp
         src/Camera/camera.h
         src/Camera/light.cpp
@@ -92,7 +92,7 @@ add_executable(waterSim
         src/main.cpp
         .gitignore
         CMakeLists.txt
-        README.md)
+        README.md src/Skybox/skyboxRenderer.cpp src/Skybox/skyboxRenderer.h src/Camera/dirLight.cpp src/Camera/dirLight.h)
 
 target_link_libraries(waterSim
         opengl32
