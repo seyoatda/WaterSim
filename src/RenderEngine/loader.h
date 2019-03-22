@@ -19,6 +19,8 @@ public:
 
     unsigned int loadCubeMap(std::vector<std::string> faces);
 
+
+
 private:
 
 };

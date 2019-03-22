@@ -1,15 +1,14 @@
 #version 420 core
 out vec4 FragColor;
 
-in vec3 Normal;
-in vec3 Position;
+in vec2 TexCoords;
 
-uniform vec3 cameraPos;
-uniform samplerCube skybox;
+uniform sampler2D reflectionTexture;
+uniform sampler2D refractionTexture;
 
 void main() {
-    vec3 I = normalize(Position - cameraPos);
-    vec3 R = reflect(I, normalize(Normal));
-    FragColor = vec4(texture(skybox, R).rgb, 1.0);
+    vec4 reflectColor = texture(reflectionTexture, TexCoords);
+    vec4 refractColor = texture(refractionTexture, TexCoords);
+    FragColor = mix(reflectColor, refractColor, 0.5);
 
 }

@@ -10,14 +10,21 @@
 #include "waterShader.h"
 #include "waterTile.h"
 #include "../camera/camera.h"
+#include "waterFbo.h"
+#include "../Entities/object.h"
+#include "../RenderEngine/loader.h"
 
 class WaterRenderer {
 public:
-    void render(std::vector<WaterTile> const & water,Camera camera);
+    WaterRenderer(WaterFbo &waterFbo);
+    void render(Camera camera);
 
 private:
-    WaterShader shader;
-    
+    Loader loader;
+
+    WaterShader waterShader;
+    WaterFbo* waterFbo;
+    Object waterObj;
 };
 
 

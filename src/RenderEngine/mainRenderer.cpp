@@ -3,15 +3,137 @@
 //
 
 #include "mainRenderer.h"
+#include "displayManager.h"
+
+glm::vec3 pointLightPositions[] = {
+        glm::vec3(0.7f, 0.2f, 2.0f),
+        glm::vec3(2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f, 2.0f, -12.0f),
+        glm::vec3(0.0f, 0.0f, -3.0f)
+};
+
+
+//创建数据
+vector<float> vertices = {
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
+};
 
 MainRenderer::MainRenderer()
         : modelShader("../res/shaderCode/33shader"),
-          lampShader("../res/shaderCode/light_shader") {
+          lampShader("../res/shaderCode/light_shader"),
+          modelone("C:\\Users\\54367\\CLionProjects\\waterSim\\res\\models\\nanosuit\\nanosuit.obj"),
+          lightObj(loader.loadVAO(vertices, 8, {3})) {
 
-    uboTrans=initUboTrans();
+    uboTrans = initUboTrans();
+    uboPlane = initUboPlane();
 }
 
-void MainRenderer::render(const Camera &camera) {
+void MainRenderer::render(Camera &camera) {
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    modelShader.use();
+    //建立模型矩阵
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
+    model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+    modelShader.setMat4("model", model);
+
+
+    //建立观察矩阵
+    glm::mat4 view = camera.getViewMatrix();
+
+    //建立投影矩阵
+    glm::mat4 projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(camera.Zoom), DisplayManager::getRatio(), 0.1f, 100.0f);
+    setUboTrans(projection, view);
+
+//        //
+    modelShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+    modelShader.setVec3("dirLight.ambient", 0.2, 0.2f, 0.2f);
+    modelShader.setVec3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
+    modelShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+//        //
+    modelShader.setVec3("spotLight.position", camera.Position);
+    modelShader.setVec3("spotLight.direction", camera.Front);
+    modelShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+    modelShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+    modelShader.setVec3("spotLight.ambient", 0.0f);
+    modelShader.setVec3("spotLight.diffuse", 1.0f);
+    modelShader.setVec3("spotLight.specular", 1.0f);
+    modelShader.setFloat("spotLight.constant", 1.0f);
+    modelShader.setFloat("spotLight.linear", 0.09f);
+    modelShader.setFloat("spotLight.quadratic", 0.032f);
+//        //
+    for (int i = 0; i < 4; ++i) {
+        std::string str = "pointLights[" + std::to_string(i) + "].";
+        modelShader.setVec3(str + "position", pointLightPositions[i]);
+        modelShader.setVec3(str + "ambient", 0.5f, 0.5f, 0.5f);
+        modelShader.setVec3(str + "diffuse", 0.8f, 0.8f, 0.8f);
+        modelShader.setVec3(str + "specular", 1.0f, 1.0f, 1.0f);
+        modelShader.setFloat(str + "constant", 1.0f);
+        modelShader.setFloat(str + "linear", 0.09f);
+        modelShader.setFloat(str + "quadratic", 0.032f);
+    }
+//
+    modelShader.setVec3("viewPos", camera.Position);
+//        //设置材质
+    modelShader.setFloat("material.shininess", 64.0f);
+    modelone.Draw(modelShader);
+
+    //设置光源
+    lampShader.use();
+    glBindVertexArray(lightObj.getVao());
+    for (int i = 0; i < 4; i++) {
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, pointLightPositions[i]);
+        model = glm::scale(model, glm::vec3(0.2f));
+        lampShader.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, lightObj.getCount());
+    }
+
+    // draw skybox as last
+    skyboxRenderer.render(camera);
 
 }
 
@@ -45,5 +167,7 @@ void MainRenderer::setUboTrans(glm::mat4 proj, glm::mat4 view) {
 }
 
 void MainRenderer::setUboPlane(glm::vec4 clippingPlane) {
-
+    glBindBuffer(GL_UNIFORM_BUFFER, uboPlane);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4), glm::value_ptr(clippingPlane));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

@@ -13,7 +13,9 @@ enum Camera_Movement {
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
 };
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
@@ -42,13 +44,20 @@ public:
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
 
-    glm::mat4 GetViewMatrix();
+    glm::mat4 getViewMatrix();
+
+
+    void invertPitch();
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
 
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 
     void ProcessMouseScroll(float yoffset);
+
+    glm::vec3 &getPosition();
+
+    void setPosition(const glm::vec3 &Position);
 
 private:
     void updateCameraVectors();

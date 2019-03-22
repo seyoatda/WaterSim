@@ -15,7 +15,7 @@ layout(std140, binding = 1) uniform uboPlane{
 
 void main(){
     vec4 worldPos = model * vec4(aPos, 1.0f);
-
+    gl_ClipDistance[0] = dot(worldPos, plane);
     gl_Position = projection * view * worldPos;
     TexCoords = aTexCoords;
 }

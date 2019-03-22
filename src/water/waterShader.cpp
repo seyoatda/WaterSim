@@ -3,24 +3,21 @@
 //
 
 #include "waterShader.h"
-#include <string>
-namespace{
-    constexpr auto VERTPATH="../res/shaderCode/water_shader.vert";
-    constexpr auto FRAGPATH="../res/shaderCode/water_shader.frag";
-}
 
-WaterShader::WaterShader() :Shader(VERTPATH,FRAGPATH){
+
+WaterShader::WaterShader(std::string path) : Shader(path) {
 
 }
+
 void WaterShader::setProjection(glm::mat4 projection) {
-    setMat4("projection",projection);
+    setMat4("projection", projection);
 }
+
 void WaterShader::setView(glm::mat4 view) {
-    setMat4("view",view);
+    setMat4("view", view);
 }
+
 void WaterShader::setModel(glm::mat4 model) {
-    setMat4("model",model);
+    setMat4("model", model);
 }
-void WaterShader::setPlane(glm::vec4 plane) {
-    setVec4("plane",plane);
-}
+

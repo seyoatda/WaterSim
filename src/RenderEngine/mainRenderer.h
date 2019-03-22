@@ -10,13 +10,14 @@
 #include "loader.h"
 #include "../Shader/shader.h"
 #include "../Skybox/skyboxRenderer.h"
+#include "../Entities/model.h"
 #include <glm/gtc/type_ptr.hpp>
 
 class MainRenderer {
 public:
     MainRenderer();
 
-    void render(const Camera &camera);
+    void render(Camera &camera);
 
 
 
@@ -38,6 +39,8 @@ private:
     Shader modelShader;
     Shader lampShader;
     SkyboxRenderer skyboxRenderer;
+    Object lightObj;
+    Model modelone;
 
 
 };

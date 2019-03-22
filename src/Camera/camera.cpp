@@ -21,13 +21,25 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
     updateCameraVectors();
 }
 
-glm::mat4 Camera::GetViewMatrix() {
+void Camera::invertPitch() {
+    Pitch = -Pitch;
+}
+
+glm::mat4 Camera::getViewMatrix() {
     return glm::lookAt(Position, Position + Front, Up);
+}
+
+glm::vec3 &Camera::getPosition() {
+    return Position;
+}
+
+void Camera::setPosition(const glm::vec3 &Position) {
+    Camera::Position = Position;
 }
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     //练习：如果只在平面上移动，则在移动摄像机时取消y轴分量
-    glm::vec3 front = Front;
+    glm::vec3 front = glm::normalize(glm::vec3(Front.x, 0, Front.z));
     glm::vec3 right = Right;
     float velocity = MovementSpeed * deltaTime;
     if (direction == FORWARD)
@@ -38,6 +50,10 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
         Position -= right * velocity;
     if (direction == RIGHT)
         Position += right * velocity;
+    if (direction == UP)
+        Position.y += 1.0f * velocity;
+    if (direction == DOWN)
+        Position.y -= 1.0f * velocity;
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
@@ -67,9 +83,9 @@ void Camera::ProcessMouseScroll(float yoffset) {
 
 void Camera::updateCameraVectors() {
     glm::vec3 front;
-    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    front.y = sin(glm::radians(Pitch));
-    front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    front.x = static_cast<float>(cos(glm::radians(Yaw)) * cos(glm::radians(Pitch)));
+    front.y = static_cast<float>(sin(glm::radians(Pitch)));
+    front.z = static_cast<float>(sin(glm::radians(Yaw)) * cos(glm::radians(Pitch)));
     Front = glm::normalize(front);
     Right = glm::normalize(glm::cross(Front, WorldUp));
     Up = glm::normalize(glm::cross(Right, Front));

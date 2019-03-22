@@ -9,7 +9,7 @@
 
 class WaterShader: public Shader {
 public:
-    WaterShader();
+    WaterShader(std::string path);
 
     void setProjection(glm::mat4 projection);
 
@@ -17,7 +17,8 @@ public:
 
     void setModel(glm::mat4 model);
 
-    void setPlane(glm::vec4 plane);
+
+
 };
 
 
