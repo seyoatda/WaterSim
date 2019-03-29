@@ -2,20 +2,23 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoords;
 
-out vec2 TexCoords;
-
+out vec2 texCoords;
+out vec4 clipSpace;
+out vec3 cameraVec;
+out vec3 lightVec;
 uniform mat4 model;
 layout(std140, binding = 2) uniform uboTrans{
     mat4 projection;
     mat4 view;
 };
-layout(std140, binding = 1) uniform uboPlane{
-    vec4 plane;
-};
+uniform vec3 cameraPos;
+uniform vec3 lightPos;
 
 void main(){
     vec4 worldPos = model * vec4(aPos, 1.0f);
-    gl_ClipDistance[0] = dot(worldPos, plane);
-    gl_Position = projection * view * worldPos;
-    TexCoords = aTexCoords;
+    clipSpace = projection * view * worldPos;
+    gl_Position = clipSpace;
+    texCoords = aTexCoords * 20;
+    cameraVec = cameraPos - worldPos.xyz;
+    lightVec = worldPos.xyz - lightPos;
 }

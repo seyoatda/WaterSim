@@ -19,7 +19,7 @@ public:
 
     unsigned int loadCubeMap(std::vector<std::string> faces);
 
-
+    unsigned int loadTexture(std::string path);
 
 private:
 

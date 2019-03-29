@@ -5,8 +5,8 @@
 #ifndef OPENGL_MAINRENDERER_H
 #define OPENGL_MAINRENDERER_H
 
-#include "../camera/light.h"
-#include "../camera/camera.h"
+#include "../Camera/light.h"
+#include "../Camera/camera.h"
 #include "loader.h"
 #include "../Shader/shader.h"
 #include "../Skybox/skyboxRenderer.h"
@@ -40,7 +40,8 @@ private:
     Shader lampShader;
     SkyboxRenderer skyboxRenderer;
     Object lightObj;
-    Model modelone;
+    Model nanoModel;
+    Model bowlModel;
 
 
 };

@@ -24,6 +24,10 @@ public:
 
     static float getRatio();
 
+    static double getDeltaTime();
+
+    static double calcFrame();
+
 private:
     //窗口
 
@@ -31,6 +35,9 @@ private:
     static std::string name;
     static GLFWwindow *wwindow;
 
+    static double currentFrame;
+    static double lastFrame;
+    static double deltaTime;
     //鼠标移动和滚轮回调函数
 
 };

@@ -6,8 +6,11 @@
 #include "displayManager.h"
 
 //静态变量初始化
-GLFWwindow* DisplayManager::wwindow;
+GLFWwindow *DisplayManager::wwindow;
 float DisplayManager::aspectRatio;
+double DisplayManager::lastFrame = 0.0;
+double DisplayManager::currentFrame = 0.0;
+double DisplayManager::deltaTime = 0.0;
 
 int DisplayManager::createWindow(int width, int height, const std::string name) {
     //
@@ -50,4 +53,15 @@ GLFWwindow *DisplayManager::window() {
 
 float DisplayManager::getRatio() {
     return aspectRatio;
+}
+
+double DisplayManager::getDeltaTime() {
+    return deltaTime;
+}
+
+double DisplayManager::calcFrame() {
+    currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+    return deltaTime;
 }

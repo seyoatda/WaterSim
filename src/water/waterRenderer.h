@@ -13,18 +13,28 @@
 #include "waterFbo.h"
 #include "../Entities/object.h"
 #include "../RenderEngine/loader.h"
+#include "../tool/drawer.h"
+#include "../Shader/basicShader.h"
 
 class WaterRenderer {
 public:
-    WaterRenderer(WaterFbo &waterFbo);
-    void render(Camera camera);
+    explicit WaterRenderer(WaterFbo &waterFbo);
+
+    void render(Camera &camera, Light &light);
 
 private:
     Loader loader;
 
     WaterShader waterShader;
-    WaterFbo* waterFbo;
+    BasicShader basicShader;
+    WaterFbo *waterFbo;
     Object waterObj;
+    Object shapeObj;
+
+    unsigned int dudvTexture;
+    unsigned int normalTexture;
+
+    float moveFactor;
 };
 
 

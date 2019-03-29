@@ -6,6 +6,7 @@
 #define OPENGL_WATER_SHADER_H
 
 #include "../shader/shader.h"
+#include "../Camera/light.h"
 
 class WaterShader: public Shader {
 public:
@@ -17,8 +18,15 @@ public:
 
     void setModel(glm::mat4 model);
 
+    void setMoveFactor(float factor);
 
+    void setCameraPos(glm::vec3 pos);
 
+    void setLight(Light& light);
+
+    void setTexture(const std::string &textureName,unsigned int textureId);
+
+    void setNearFar(float nearP, float farP);
 };
 
 

@@ -6,10 +6,10 @@
 #include "displayManager.h"
 
 glm::vec3 pointLightPositions[] = {
-        glm::vec3(0.7f, 0.2f, 2.0f),
-        glm::vec3(2.3f, -3.3f, -4.0f),
-        glm::vec3(-4.0f, 2.0f, -12.0f),
-        glm::vec3(0.0f, 0.0f, -3.0f)
+        glm::vec3(0.5f, 1.0f, 2.0f),
+        glm::vec3(-0.5f, -3.0f, 2.0f),
+        glm::vec3(-4.0f, -2.0f, -2.0f),
+        glm::vec3(1.0f, 0.0f, -3.0f)
 };
 
 
@@ -62,7 +62,8 @@ vector<float> vertices = {
 MainRenderer::MainRenderer()
         : modelShader("../res/shaderCode/33shader"),
           lampShader("../res/shaderCode/light_shader"),
-          modelone("C:\\Users\\54367\\CLionProjects\\waterSim\\res\\models\\nanosuit\\nanosuit.obj"),
+          nanoModel("../res/models/nanosuit/nanosuit.obj"),
+          bowlModel("../res/models/greyBowl/file.obj"),
           lightObj(loader.loadVAO(vertices, 8, {3})) {
 
     uboTrans = initUboTrans();
@@ -117,9 +118,14 @@ void MainRenderer::render(Camera &camera) {
     }
 //
     modelShader.setVec3("viewPos", camera.Position);
-//        //设置材质
+    //设置材质
     modelShader.setFloat("material.shininess", 64.0f);
-    modelone.Draw(modelShader);
+    nanoModel.Draw(modelShader);
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0, -5, 0));
+    model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
+    modelShader.setMat4("model", model);
+    bowlModel.Draw(modelShader);
 
     //设置光源
     lampShader.use();

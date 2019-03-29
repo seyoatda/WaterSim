@@ -23,7 +23,11 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 
 void Camera::invertPitch() {
     Pitch = -Pitch;
+    updateCameraVectors();
 }
+
+
+
 
 glm::mat4 Camera::getViewMatrix() {
     return glm::lookAt(Position, Position + Front, Up);

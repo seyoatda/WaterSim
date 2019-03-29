@@ -21,3 +21,24 @@ void WaterShader::setModel(glm::mat4 model) {
     setMat4("model", model);
 }
 
+void WaterShader::setMoveFactor(float factor) {
+    setFloat("moveFactor", factor);
+}
+
+void WaterShader::setCameraPos(glm::vec3 pos) {
+    setVec3("cameraPos", pos);
+}
+
+void WaterShader::setLight(Light &light) {
+    setVec3("lightPos", light.getPos());
+    setVec3("lightColor", light.getColor());
+}
+
+void WaterShader::setTexture(const std::string &textureName, unsigned int textureId) {
+    setInt(textureName, textureId);
+}
+
+void WaterShader::setNearFar(float nearP, float farP) {
+    setFloat("near", nearP);
+    setFloat("far", farP);
+}

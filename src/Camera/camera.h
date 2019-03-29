@@ -9,6 +9,7 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+
 enum Camera_Movement {
     FORWARD,
     BACKWARD,
@@ -38,7 +39,8 @@ public:
     float Zoom;
 
 
-    Camera(glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW,
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+           float yaw = YAW,
            float pitch = PITCH);
 
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
@@ -46,12 +48,12 @@ public:
 
     glm::mat4 getViewMatrix();
 
-
+    //反转俯仰角
     void invertPitch();
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
 
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = GL_TRUE);
 
     void ProcessMouseScroll(float yoffset);
 
