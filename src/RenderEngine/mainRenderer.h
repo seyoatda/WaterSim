@@ -41,7 +41,7 @@ private:
     SkyboxRenderer skyboxRenderer;
     Object lightObj;
     Model nanoModel;
-    Model bowlModel;
+    Model ditchModel;
 
 
 };

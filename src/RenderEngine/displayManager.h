@@ -28,6 +28,10 @@ public:
 
     static double calcFrame();
 
+    static int getWidth();
+
+    static int getHeight();
+
 private:
     //窗口
 
@@ -38,6 +42,9 @@ private:
     static double currentFrame;
     static double lastFrame;
     static double deltaTime;
+
+    static int WIDTH;
+    static int HEIGHT;
     //鼠标移动和滚轮回调函数
 
 };

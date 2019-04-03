@@ -63,7 +63,7 @@ MainRenderer::MainRenderer()
         : modelShader("../res/shaderCode/33shader"),
           lampShader("../res/shaderCode/light_shader"),
           nanoModel("../res/models/nanosuit/nanosuit.obj"),
-          bowlModel("../res/models/greyBowl/file.obj"),
+          ditchModel("../res/models/ditch/ditch.obj"),
           lightObj(loader.loadVAO(vertices, 8, {3})) {
 
     uboTrans = initUboTrans();
@@ -122,10 +122,11 @@ void MainRenderer::render(Camera &camera) {
     modelShader.setFloat("material.shininess", 64.0f);
     nanoModel.Draw(modelShader);
     model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0, -5, 0));
-    model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
+    model = glm::translate(model, glm::vec3(-4, 0, 2));
+    model = glm::rotate(model,glm::radians(45.0f),glm::vec3(0,1,0));
+    model = glm::scale(model, glm::vec3(0.05, 0.05, 0.05));
     modelShader.setMat4("model", model);
-    bowlModel.Draw(modelShader);
+    ditchModel.Draw(modelShader);
 
     //设置光源
     lampShader.use();

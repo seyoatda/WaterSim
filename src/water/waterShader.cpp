@@ -21,8 +21,8 @@ void WaterShader::setModel(glm::mat4 model) {
     setMat4("model", model);
 }
 
-void WaterShader::setMoveFactor(float factor) {
-    setFloat("moveFactor", factor);
+void WaterShader::setTime(float factor) {
+    setFloat("time", factor);
 }
 
 void WaterShader::setCameraPos(glm::vec3 pos) {

@@ -11,9 +11,13 @@ float DisplayManager::aspectRatio;
 double DisplayManager::lastFrame = 0.0;
 double DisplayManager::currentFrame = 0.0;
 double DisplayManager::deltaTime = 0.0;
+int DisplayManager::HEIGHT = 1280;
+int DisplayManager::WIDTH = 720;
 
 int DisplayManager::createWindow(int width, int height, const std::string name) {
     //
+    HEIGHT = height;
+    WIDTH = width;
     aspectRatio = (float) width / (float) height;
 
     glfwInit();
@@ -64,4 +68,12 @@ double DisplayManager::calcFrame() {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
     return deltaTime;
+}
+
+int DisplayManager::getWidth() {
+    return WIDTH;
+}
+
+int DisplayManager::getHeight() {
+    return HEIGHT;
 }

@@ -18,7 +18,7 @@ public:
 
     void setModel(glm::mat4 model);
 
-    void setMoveFactor(float factor);
+    void setTime(float factor);
 
     void setCameraPos(glm::vec3 pos);
 

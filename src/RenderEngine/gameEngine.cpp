@@ -38,7 +38,6 @@ void GameEngine::start() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CLIP_DISTANCE0);
 
-
     while (!glfwWindowShouldClose(DisplayManager::window())) {
 
         //
@@ -55,7 +54,7 @@ void GameEngine::start() {
         camera.getPosition().y -= distance;
         camera.invertPitch();
         waterFbo.bindReflectionFbo();
-        mainRenderer.setUboPlane(glm::vec4(0.0, negative, 0.0, waterHeight));
+        mainRenderer.setUboPlane(glm::vec4(0.0, 1, 0.0, waterHeight));
         mainRenderer.render(camera);
         //复原摄像机
         camera.getPosition().y += distance;
@@ -64,7 +63,7 @@ void GameEngine::start() {
         //渲染折射缓冲
         waterFbo.bindRefractionFbo();
         Camera cameraTmp(camera);
-        mainRenderer.setUboPlane(glm::vec4(0.0, -negative, 0.0, waterHeight));
+        mainRenderer.setUboPlane(glm::vec4(0.0, -1, 0.0, waterHeight));
         mainRenderer.render(cameraTmp);
 
         mainRenderer.setUboPlane(glm::vec4(0.0, 0.0, 0.0, 0.0));

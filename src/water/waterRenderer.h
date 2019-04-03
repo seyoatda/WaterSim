@@ -22,6 +22,9 @@ public:
 
     void render(Camera &camera, Light &light);
 
+    void startMasking();
+
+    void stopMasking();
 private:
     Loader loader;
 
@@ -31,10 +34,12 @@ private:
     Object waterObj;
     Object shapeObj;
 
-    unsigned int dudvTexture;
-    unsigned int normalTexture;
+    unsigned int dudvMap;
+    unsigned int normalMap;
+    unsigned int flowMap;
 
     float moveFactor;
+    glm::vec2 tiling;
 };
 
 

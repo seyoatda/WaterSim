@@ -4,10 +4,6 @@
 
 #include "waterFbo.h"
 
-namespace {
-    constexpr int R_WIDTH = 1280, R_HEIGHT = 720;
-    constexpr int A_WIDTH = 1280, A_HEIGHT = 720;
-}
 
 WaterFbo::WaterFbo() {
     initReflectionFbo();
@@ -25,11 +21,11 @@ void WaterFbo::clear() {
 }
 
 void WaterFbo::bindReflectionFbo() {
-    bindFbo(reflectionRbo, R_WIDTH, R_HEIGHT);
+    bindFbo(reflectionRbo, DisplayManager::getWidth(), DisplayManager::getHeight());
 }
 
 void WaterFbo::bindRefractionFbo() {
-    bindFbo(refractionFbo,A_WIDTH,A_HEIGHT);
+    bindFbo(refractionFbo,DisplayManager::getWidth(), DisplayManager::getHeight());
 }
 
 void WaterFbo::bindFbo(unsigned int fbo, int width, int height) {
@@ -105,8 +101,8 @@ unsigned int WaterFbo::getRefractionFboDepth() const {
 
 void WaterFbo::initReflectionFbo() {
     reflectionFbo = createFbo();
-    reflectionFboColor = createFboColor(R_WIDTH, R_HEIGHT);
-    reflectionRbo = createRbo(R_WIDTH, R_HEIGHT);
+    reflectionFboColor = createFboColor(DisplayManager::getWidth(), DisplayManager::getHeight());
+    reflectionRbo = createRbo(DisplayManager::getWidth(), DisplayManager::getHeight());
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: reflection fbo is not complete!" << std::endl;
     unbindFbo();
@@ -114,8 +110,8 @@ void WaterFbo::initReflectionFbo() {
 
 void WaterFbo::initRefractionFbo() {
     refractionFbo = createFbo();
-    refractionFboColor = createFboColor(A_WIDTH, A_HEIGHT);
-    refractionFboDepth = createFboDepth(A_WIDTH, A_HEIGHT);
+    refractionFboColor = createFboColor(DisplayManager::getWidth(), DisplayManager::getHeight());
+    refractionFboDepth = createFboDepth(DisplayManager::getWidth(), DisplayManager::getHeight());
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: refraction fbo is not complete!" << std::endl;
     unbindFbo();

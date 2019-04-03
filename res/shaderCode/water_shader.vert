@@ -18,7 +18,7 @@ void main(){
     vec4 worldPos = model * vec4(aPos, 1.0f);
     clipSpace = projection * view * worldPos;
     gl_Position = clipSpace;
-    texCoords = aTexCoords * 20;
+    texCoords = aTexCoords;
     cameraVec = cameraPos - worldPos.xyz;
     lightVec = worldPos.xyz - lightPos;
 }

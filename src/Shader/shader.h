@@ -18,6 +18,7 @@ public:
     Shader(std::string vertexPath, std::string fragmentPath);
 
     Shader(std::string path);
+
     //
     void use();
 
@@ -30,6 +31,10 @@ public:
     void setFloat(const std::string &name, float value) const;
 
     void setMat4(const std::string &name, const glm::mat4 &mat) const;
+
+    void setVec2(const std::string &name, glm::vec2 value) const;
+
+    void setVec2(const std::string &name, float x, float y) const;
 
     void setVec3(const std::string &name, glm::vec3 vec) const;
 

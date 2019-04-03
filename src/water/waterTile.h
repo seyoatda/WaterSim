@@ -16,7 +16,6 @@ public:
 
     float getHeight() const;
 
-    static constexpr float TILE_SIZE = 200.0f;
 
 private:
     float x, z, height;
