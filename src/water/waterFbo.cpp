@@ -21,11 +21,11 @@ void WaterFbo::clear() {
 }
 
 void WaterFbo::bindReflectionFbo() {
-    bindFbo(reflectionRbo, DisplayManager::getWidth(), DisplayManager::getHeight());
+    bindFbo(reflectionRbo, WindowManager::getWidth(), WindowManager::getHeight());
 }
 
 void WaterFbo::bindRefractionFbo() {
-    bindFbo(refractionFbo,DisplayManager::getWidth(), DisplayManager::getHeight());
+    bindFbo(refractionFbo,WindowManager::getWidth(), WindowManager::getHeight());
 }
 
 void WaterFbo::bindFbo(unsigned int fbo, int width, int height) {
@@ -36,7 +36,7 @@ void WaterFbo::bindFbo(unsigned int fbo, int width, int height) {
 
 void WaterFbo::unbindFbo() {
     int width = 0, height = 0;
-    glfwGetFramebufferSize(DisplayManager::window(), &width, &height);
+    glfwGetFramebufferSize(WindowManager::window(), &width, &height);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, 1280, 720);
 }
@@ -101,8 +101,8 @@ unsigned int WaterFbo::getRefractionFboDepth() const {
 
 void WaterFbo::initReflectionFbo() {
     reflectionFbo = createFbo();
-    reflectionFboColor = createFboColor(DisplayManager::getWidth(), DisplayManager::getHeight());
-    reflectionRbo = createRbo(DisplayManager::getWidth(), DisplayManager::getHeight());
+    reflectionFboColor = createFboColor(WindowManager::getWidth(), WindowManager::getHeight());
+    reflectionRbo = createRbo(WindowManager::getWidth(), WindowManager::getHeight());
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: reflection fbo is not complete!" << std::endl;
     unbindFbo();
@@ -110,8 +110,8 @@ void WaterFbo::initReflectionFbo() {
 
 void WaterFbo::initRefractionFbo() {
     refractionFbo = createFbo();
-    refractionFboColor = createFboColor(DisplayManager::getWidth(), DisplayManager::getHeight());
-    refractionFboDepth = createFboDepth(DisplayManager::getWidth(), DisplayManager::getHeight());
+    refractionFboColor = createFboColor(WindowManager::getWidth(), WindowManager::getHeight());
+    refractionFboDepth = createFboDepth(WindowManager::getWidth(), WindowManager::getHeight());
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: refraction fbo is not complete!" << std::endl;
     unbindFbo();

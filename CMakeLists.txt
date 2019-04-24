@@ -24,10 +24,10 @@ add_executable(waterSim
         src/Entities/model.h
         src/Entities/object.cpp
         src/Entities/object.h
-        src/RenderEngine/displayManager.cpp
-        src/RenderEngine/displayManager.h
-        src/RenderEngine/gameEngine.cpp
-        src/RenderEngine/gameEngine.h
+        src/RenderEngine/windowManager.cpp
+        src/RenderEngine/windowManager.h
+        src/RenderEngine/renderEngine.cpp
+        src/RenderEngine/renderEngine.h
         src/RenderEngine/loader.cpp
         src/RenderEngine/loader.h
         src/RenderEngine/mainRenderer.cpp

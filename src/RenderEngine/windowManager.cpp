@@ -3,18 +3,18 @@
 //
 
 
-#include "displayManager.h"
+#include "windowManager.h"
 
 //静态变量初始化
-GLFWwindow *DisplayManager::wwindow;
-float DisplayManager::aspectRatio;
-double DisplayManager::lastFrame = 0.0;
-double DisplayManager::currentFrame = 0.0;
-double DisplayManager::deltaTime = 0.0;
-int DisplayManager::HEIGHT = 1280;
-int DisplayManager::WIDTH = 720;
+GLFWwindow *WindowManager::wwindow;
+float WindowManager::aspectRatio;
+double WindowManager::lastFrame = 0.0;
+double WindowManager::currentFrame = 0.0;
+double WindowManager::deltaTime = 0.0;
+int WindowManager::HEIGHT = 1280;
+int WindowManager::WIDTH = 720;
 
-int DisplayManager::createWindow(int width, int height, const std::string name) {
+int WindowManager::createWindow(int width, int height, const std::string name) {
     //
     HEIGHT = height;
     WIDTH = width;
@@ -41,39 +41,39 @@ int DisplayManager::createWindow(int width, int height, const std::string name) 
     return 0;
 }
 
-void DisplayManager::update() {
+void WindowManager::update() {
     //检查事件，交换双重缓存
     glfwPollEvents();
     glfwSwapBuffers(wwindow);
 }
 
-void DisplayManager::close() {
+void WindowManager::close() {
 
 }
 
-GLFWwindow *DisplayManager::window() {
+GLFWwindow *WindowManager::window() {
     return wwindow;
 }
 
-float DisplayManager::getRatio() {
+float WindowManager::getRatio() {
     return aspectRatio;
 }
 
-double DisplayManager::getDeltaTime() {
+double WindowManager::getDeltaTime() {
     return deltaTime;
 }
 
-double DisplayManager::calcFrame() {
+double WindowManager::calcFrame() {
     currentFrame = glfwGetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
     return deltaTime;
 }
 
-int DisplayManager::getWidth() {
+int WindowManager::getWidth() {
     return WIDTH;
 }
 
-int DisplayManager::getHeight() {
+int WindowManager::getHeight() {
     return HEIGHT;
 }

@@ -42,7 +42,7 @@ void Camera::setPosition(const glm::vec3 &Position) {
 }
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
-    //练习：如果只在平面上移动，则在移动摄像机时取消y轴分量
+    //只在平面上移动，则在移动摄像机时取消y轴分量
     glm::vec3 front = glm::normalize(glm::vec3(Front.x, 0, Front.z));
     glm::vec3 right = Right;
     float velocity = MovementSpeed * deltaTime;

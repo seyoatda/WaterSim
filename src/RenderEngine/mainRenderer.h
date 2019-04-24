@@ -25,6 +25,8 @@ public:
 
     void setUboPlane(glm::vec4 clippingPlane);
 
+    void setRefract();
+
 private:
     //初始化projection & view 的缓冲块
     unsigned int initUboTrans();

@@ -6,20 +6,20 @@
 #define OPENGL_GAMEENGINE_H
 
 #include "loader.h"
-#include "displayManager.h"
+#include "windowManager.h"
 #include "../water/waterRenderer.h"
 #include "../camera/camera.h"
 #include "../Entities/model.h"
 #include "../water/waterFbo.h"
 #include <glm/gtc/type_ptr.hpp>
 
-class GameEngine {
+class RenderEngine {
 public:
-    GameEngine();
-    ~GameEngine();
+    RenderEngine();
+    ~RenderEngine();
     void start();
 private:
-    DisplayManager* displayManager;
+    WindowManager* displayManager;
     static Camera camera;
 
     //计算帧数

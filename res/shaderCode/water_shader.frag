@@ -21,9 +21,9 @@ uniform vec2 tiling;
 uniform vec3 lightColor;
 
 
-const float waveStrength = 0.01;
-const float shineDamper = 20.0;
-const float reflectivity = 4.0;
+const float waveFactor = 0.01;
+const float shineFactor = 40.0;
+const float reflectFactor = 4.0;
 void main() {
 
     //计算ndc坐标
@@ -47,9 +47,9 @@ void main() {
     //提取dudvMap中的值，并乘上缩小系数
     //进行x和y方向的偏移
     vec2 flowSpeed = texture(dudvMap, texCoords*tiling*10).rg * 2.0 -1.0;
-    vec2 distortedTexCoords = texture(dudvMap, vec2(TexUV.x + time, TexUV.y * tiling)).rg * 0.1;
+    vec2 distortedTexCoords = texture(normalMap, vec2(TexUV.x + time, TexUV.y)).rg * 0.1;
     distortedTexCoords = TexUV + vec2(distortedTexCoords.x, distortedTexCoords.y + time);
-    vec2 distortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength;
+    vec2 distortion = (texture(normalMap, distortedTexCoords).rg * 2.0 - 1.0) * waveFactor;
 
     //        vec2 distortion = flowSpeed * time;
 
@@ -71,15 +71,20 @@ void main() {
 
     //计算菲涅尔效应
     vec3 viewVec = normalize(cameraVec);
-    float fresnelFactor = abs(dot(viewVec, normal));
-    fresnelFactor = pow(fresnelFactor, 2);
+    float cosI = dot(viewVec, normal);
+    float sinI = sqrt(1 - pow(cosI, 2));
+    float cosT = sqrt(1 - pow(1 / 1.33 * sinI, 2));
+    float Rs = (cosI - 1.33 * cosT)/(cosI + 1.33 * cosT);
+    float Rp = (cosT - 1.33 * cosI)/(cosT + 1.33 * cosI);
+    float R = 0.5 * (pow(Rs, 2) + pow(Rp, 2));
+    float fresnelFactor = pow(R, 0.3);
 
 
     //高光效果
     vec3 reflectedLight = reflect(normalize(lightVec), normal);
     float specular = max(dot(reflectedLight, viewVec), 0.0);
-    specular = pow(specular, shineDamper);
-    vec3 specularLight = lightColor * specular * reflectivity * waterDepth;
+    specular = pow(specular, shineFactor);
+    vec3 specularLight = lightColor * specular * reflectFactor * waterDepth;
 
     vec4 reflectColor = texture(reflectionTexture, reflectTexCoords);
 
@@ -88,9 +93,10 @@ void main() {
     vec4 refractColor = texture(refractionTexture, refractTexCoords);
 
 
-    FragColor = mix(reflectColor, refractColor, fresnelFactor);
-    //FragColor.a = waterDepth;
-    FragColor = mix(FragColor, + vec4(specularLight, 1.0), 0.2);
+    refractColor.a = waterDepth;
+    FragColor = mix(refractColor+vec4(0, 0.2, 0.3, 0.2), reflectColor, fresnelFactor);
+
+    FragColor = mix(FragColor, vec4(specularLight, 1.0), 0.2);
 
 
 }

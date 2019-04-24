@@ -8,7 +8,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "../renderEngine/displayManager.h"
+#include "../RenderEngine/windowManager.h"
 
 class WaterFbo {
 public:

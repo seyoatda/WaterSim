@@ -2,32 +2,32 @@
 // Created by 54367 on 2019/3/8.
 //
 
-#include "gameEngine.h"
+#include "renderEngine.h"
 #include "../Skybox/skyboxRenderer.h"
 #include "mainRenderer.h"
 
 
-float GameEngine::lastX = 640.0;
-float GameEngine::lastY = 320.0;
-bool GameEngine::firstMouse = true;
-float GameEngine::ratio = 0.5;
-Camera GameEngine::camera = Camera(glm::vec3(0.0f, 1.0f, 3.0f));
+float RenderEngine::lastX = 640.0;
+float RenderEngine::lastY = 320.0;
+bool RenderEngine::firstMouse = true;
+float RenderEngine::ratio = 0.5;
+Camera RenderEngine::camera = Camera(glm::vec3(0.0f, 1.0f, 3.0f));
 
-GameEngine::GameEngine() {
+RenderEngine::RenderEngine() {
 
-    DisplayManager::createWindow(1280, 720, "learnOpenGL");
-    GLFWwindow *wwindow = DisplayManager::window();
+    WindowManager::createWindow(1280, 720, "learnOpenGL");
+    GLFWwindow *wwindow = WindowManager::window();
     glfwSetInputMode(wwindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(wwindow, mouse_callback);
     glfwSetScrollCallback(wwindow, scroll_callback);
 
 }
 
-GameEngine::~GameEngine() {
+RenderEngine::~RenderEngine() {
 
 }
 
-void GameEngine::start() {
+void RenderEngine::start() {
     float waterHeight = 0.0f;
 
     //初始化各个渲染器
@@ -36,15 +36,15 @@ void GameEngine::start() {
     WaterRenderer waterRenderer(waterFbo);
     Light light(glm::vec3(4.0, 6.0, -4.0), glm::vec3(1, 1, 1));
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CLIP_DISTANCE0);
 
-    while (!glfwWindowShouldClose(DisplayManager::window())) {
+
+    while (!glfwWindowShouldClose(WindowManager::window())) {
 
         //
-        processInput(DisplayManager::window());
+        processInput(WindowManager::window());
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        DisplayManager::calcFrame();
+        WindowManager::calcFrame();
         //创建一个渲染程序
 
 
@@ -75,13 +75,13 @@ void GameEngine::start() {
         waterRenderer.render(camera, light);
 
         //清除缓冲，响应窗口事件
-        DisplayManager::update();
+        WindowManager::update();
     }
     glfwTerminate();
 }
 
-void GameEngine::processInput(GLFWwindow *wwindow) {
-    auto deltaTime = static_cast<float>(DisplayManager::getDeltaTime());
+void RenderEngine::processInput(GLFWwindow *wwindow) {
+    auto deltaTime = static_cast<float>(WindowManager::getDeltaTime());
     if (glfwGetKey(wwindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(wwindow, true);
     if (glfwGetKey(wwindow, GLFW_KEY_UP) == GLFW_PRESS)
@@ -104,7 +104,7 @@ void GameEngine::processInput(GLFWwindow *wwindow) {
 
 }
 
-void GameEngine::mouse_callback(GLFWwindow *wwindow, double xpos, double ypos) {
+void RenderEngine::mouse_callback(GLFWwindow *wwindow, double xpos, double ypos) {
     if (firstMouse) {
         lastX = (float) xpos;
         lastY = (float) ypos;
@@ -118,7 +118,7 @@ void GameEngine::mouse_callback(GLFWwindow *wwindow, double xpos, double ypos) {
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-void GameEngine::scroll_callback(GLFWwindow *wwindow, double xoffset, double yoffset) {
+void RenderEngine::scroll_callback(GLFWwindow *wwindow, double xoffset, double yoffset) {
     camera.ProcessMouseScroll((float) yoffset);
 }
 

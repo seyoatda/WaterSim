@@ -62,7 +62,7 @@ void WaterRenderer::render(Camera &camera, Light &light) {
     waterShader.setCameraPos(camera.getPosition());
     waterShader.setLight(light);
     //绑定纹理单元
-    moveFactor += 0.1f * DisplayManager::calcFrame();
+    moveFactor += 0.1f * WindowManager::calcFrame();
     if (moveFactor > 1)moveFactor -= 1;
     waterShader.setTime(moveFactor);
     model = glm::translate(model, glm::vec3(0, -0.0001, 0));

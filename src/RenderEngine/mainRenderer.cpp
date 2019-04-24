@@ -3,7 +3,7 @@
 //
 
 #include "mainRenderer.h"
-#include "displayManager.h"
+#include "windowManager.h"
 
 glm::vec3 pointLightPositions[] = {
         glm::vec3(0.5f, 1.0f, 2.0f),
@@ -65,7 +65,7 @@ MainRenderer::MainRenderer()
           nanoModel("../res/models/nanosuit/nanosuit.obj"),
           ditchModel("../res/models/ditch/ditch.obj"),
           lightObj(loader.loadVAO(vertices, 8, {3})) {
-
+    glEnable(GL_CLIP_DISTANCE0);
     uboTrans = initUboTrans();
     uboPlane = initUboPlane();
 }
@@ -73,6 +73,7 @@ MainRenderer::MainRenderer()
 void MainRenderer::render(Camera &camera) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     modelShader.use();
     //建立模型矩阵
     glm::mat4 model = glm::mat4(1.0f);
@@ -86,7 +87,7 @@ void MainRenderer::render(Camera &camera) {
 
     //建立投影矩阵
     glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(camera.Zoom), DisplayManager::getRatio(), 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(camera.Zoom), WindowManager::getRatio(), 0.1f, 100.0f);
     setUboTrans(projection, view);
 
 //        //

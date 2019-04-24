@@ -19,6 +19,6 @@ void main(){
     clipSpace = projection * view * worldPos;
     gl_Position = clipSpace;
     texCoords = aTexCoords;
-    cameraVec = cameraPos - worldPos.xyz;
+    cameraVec = cameraPos - aPos;
     lightVec = worldPos.xyz - lightPos;
 }

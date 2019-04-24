@@ -4,13 +4,13 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-#include "RenderEngine/gameEngine.h"
+#include "RenderEngine/renderEngine.h"
 
 
 unsigned int loadTexture(char const *);
 
 int main() {
-    GameEngine ge;
+    RenderEngine ge;
     ge.start();
 }
 

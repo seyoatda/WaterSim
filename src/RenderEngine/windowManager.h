@@ -10,7 +10,7 @@
 #include <iostream>
 #include "../camera/camera.h"
 
-class DisplayManager {
+class WindowManager {
 public:
 
 
